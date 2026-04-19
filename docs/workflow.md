@@ -88,19 +88,25 @@ Update `episodes/<id>/metadata.yaml` with:
 - Actual `cost_usd` (check ElevenLabs dashboard for exact)
 - Any `notes` about what worked or didn't
 
-## 8. Upload + RSS update (not yet implemented)
-
-Once R2 storage and RSS feed builder are done:
+## 8. Upload + RSS update
 
 ```bash
-python scripts/publish.py --episode 04_your-episode-slug
+python scripts/publish.py --episode 04_your-episode-slug \
+    --intro static/intro.mp3 \
+    --outro static/outro.mp3
 ```
 
 This will:
-1. PUT the MP3 to Cloudflare R2
-2. Update the RSS feed XML and PUT that to R2
-3. Print the public URL
-4. (Optional) Ping Apple Podcasts to refresh the feed
+1. Splice intro/outro + normalize to -16 LUFS (Apple/Spotify spec)
+2. PUT the MP3 to Cloudflare R2
+3. Scan all episodes with an `audio.url` in their metadata.yaml,
+   rebuild `feed.xml`
+4. PUT the feed to R2
+5. Print the audio URL + feed URL
+
+For the first episode only, you'll need to submit the feed URL to
+Apple Podcasts Connect and Spotify for Creators. After that, both
+platforms poll the feed automatically every few hours.
 
 ## 9. Promote
 

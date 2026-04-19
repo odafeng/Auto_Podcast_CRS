@@ -6,16 +6,18 @@ Turn a published WordPress blog post into a published podcast episode
 with minimal human intervention — ideally, zero clicks between "hit
 Publish on WP" and "episode is live on Apple Podcasts".
 
-## Current state (alpha)
+## Current state (v0.4.0 beta)
 
 ```
 Manual:  blog post URL → [me] → saved as source.md
    |
-   ├── ScriptAdapter (Claude)      ← works
-   ├── TTSProvider (ElevenLabs v3) ← works
-   ├── AudioPostProcessor (ffmpeg) ← works (concat only, no norm yet)
-   ├── R2 upload                   ← not yet wired
-   ├── RSS feed generation         ← not yet wired
+   ├── ScriptAdapter (Claude)      ← works, v2 default
+   ├── TTSProvider (ElevenLabs v3) ← works, retry + logging
+   ├── AudioPostProcessor (ffmpeg) ← works, concat only
+   ├── AudioFinishing (ffmpeg)     ← works, intro/outro + LUFS -16
+   ├── StorageProvider (R2)        ← works, boto3 via S3-compat API
+   ├── RSSFeedBuilder (feedgen)    ← works, iTunes-spec
+   ├── publish.py orchestrator     ← works, single command
    └── WordPress webhook trigger   ← not yet wired
 ```
 
@@ -59,7 +61,13 @@ The goal is to be able to swap any one of these without touching the others:
 - Input: local MP3 path + object key
 - Output: public URL
 - Implementations:
-  - `R2Storage` (TODO)
+  - `R2Storage` ✅ (current) — boto3 + Cloudflare R2
+
+### AudioFinishing
+- Input: raw MP3 + optional intro/outro
+- Output: single normalized MP3 at target LUFS
+- `splice_intro_outro()` handles optional intro/outro gracefully
+- `normalize_lufs()` targets -16 LUFS via ffmpeg loudnorm
 
 ### RSSFeedBuilder
 - Input: list of episode metadata
