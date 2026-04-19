@@ -16,12 +16,16 @@ def _require(binary: str) -> None:
 
 def concat_mp3(chunk_paths: list[Path], output_path: Path) -> None:
     """Concat MP3 chunks without re-encoding (lossless, fast)."""
-    _require("ffmpeg")
+    # Validate inputs first — these are caller bugs and should fail fast,
+    # independent of whether ffmpeg is installed.
     if not chunk_paths:
         raise ValueError("concat_mp3 called with empty chunk_paths")
     for p in chunk_paths:
         if not p.exists():
             raise FileNotFoundError(f"Chunk not found: {p}")
+
+    # Only after inputs check out, require ffmpeg.
+    _require("ffmpeg")
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     concat_list = output_path.parent / f".concat_{output_path.stem}.txt"
@@ -51,9 +55,9 @@ def concat_mp3(chunk_paths: list[Path], output_path: Path) -> None:
 
 def get_audio_duration(path: Path) -> float:
     """Return duration in seconds via ffprobe."""
-    _require("ffprobe")
     if not path.exists():
         raise FileNotFoundError(f"Audio file not found: {path}")
+    _require("ffprobe")
     result = subprocess.run(
         [
             "ffprobe", "-v", "error",
