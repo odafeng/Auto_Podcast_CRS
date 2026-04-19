@@ -1,4 +1,4 @@
-"""Tests for R2Storage — mock boto3, no real R2 calls."""
+"""Tests for R2Storage — mock boto3 network calls, no real R2."""
 from __future__ import annotations
 
 import sys
@@ -6,6 +6,11 @@ from pathlib import Path
 from unittest.mock import MagicMock
 
 import pytest
+
+# R2Storage requires boto3 + botocore at import time (even with network
+# calls mocked). Skip cleanly if the 'storage' extra wasn't installed.
+pytest.importorskip("boto3")
+pytest.importorskip("botocore")
 
 
 @pytest.fixture

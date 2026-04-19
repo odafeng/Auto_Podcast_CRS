@@ -17,6 +17,6 @@ jobs:
           cache: pip
       - name: Install ffmpeg
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
-      - run: pip install -e ".[dev]"
+      - run: pip install -e ".[dev,publish]"
       - run: ruff check .
       - run: pytest -v
