@@ -1,0 +1,33 @@
+episode: "01"
+slug: "why-surgeons-should-code"
+title_zh: "外科醫師為什麼該學寫程式"
+title_en: "Why Surgeons Should Code"
+published: null  # not yet published
+source:
+  type: "wordpress_post"
+  url: "https://blog.shihfenghuang.com/why-surgeons-should-code/"
+  retrieved_at: "2026-04-19"
+script:
+  prompt_version: "v1_generic"
+  episode_kind: "manifesto"
+  char_count: 2717
+  chunks: 4
+  audio_tags_used: ["pauses", "thoughtful", "laughs", "emphasizes"]
+tts:
+  provider: "elevenlabs_v3"
+  voice_id: "${ELEVEN_VOICE_ID}"
+  model_id: "eleven_v3"
+  output_format: "mp3_44100_128"
+audio:
+  duration_seconds: 470.5
+  duration_mmss: "07:50"
+  size_mb: 7.18
+cost_usd:
+  claude: 0.05
+  elevenlabs: 0.40
+  total: 0.45
+notes: |
+  First episode. Manifesto tone. Based on a 2026-02-21 blog post.
+  Pipeline worked end-to-end. Known issue: v3 does not support
+  previous_request_ids, so the 3 chunk boundaries may have slight
+  prosody jumps. Author feedback on audio pending.

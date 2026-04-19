@@ -1,0 +1,33 @@
+episode: "03"
+slug: "your-first-week-with-python"
+title_zh: "你的 Python 第一週 onboarding"
+title_en: "Your First Week with Python: A Physician's Onboarding"
+published: null
+source:
+  type: "prompt_driven"
+  description: "Follow-up to ep02. Concrete, prescriptive first-day guide using Google Colab."
+script:
+  prompt_version: "v1_onboarding"
+  episode_kind: "onboarding"
+  char_count: 3413
+  chunks: 4
+  audio_tags_used: ["pauses", "emphasizes", "laughs"]
+tts:
+  provider: "elevenlabs_v3"
+  voice_id: "${ELEVEN_VOICE_ID}"
+  model_id: "eleven_v3"
+  output_format: "mp3_44100_128"
+audio:
+  duration_seconds: 610.8
+  duration_mmss: "10:12"
+  size_mb: 9.32
+cost_usd:
+  claude: 0.06
+  elevenlabs: 0.50
+  total: 0.56
+notes: |
+  Onboarding episode. Uses Google Colab (zero-install path) as primary tool.
+  Important: explicit PHI/privacy warning about NOT uploading patient data
+  to Colab. Recommends Titanic/Kaggle or fake data for Week 1 practice.
+  Graduation hint at end: Miniconda + conda env + Git for Week 2+.
+  Hook at end directs listeners to IG @drhuang.crs for questions.

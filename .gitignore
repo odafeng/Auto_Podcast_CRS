@@ -1,0 +1,84 @@
+# === Secrets ===
+# Never commit .env. Use .env.example for the template.
+.env
+.env.local
+.env.*.local
+
+# === Audio output (too large for git, host on R2 instead) ===
+*.mp3
+*.wav
+*.m4a
+*.aac
+*.ogg
+*.flac
+
+# But do keep the intro/outro placeholders if we add any
+!static/intro_placeholder.mp3
+!static/outro_placeholder.mp3
+
+# === TTS working directories ===
+tts_chunks*/
+tts_chunks_*/
+audio_work/
+
+# === Python ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# === Virtual environments ===
+.venv/
+venv/
+env/
+ENV/
+
+# === IDE ===
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# === macOS / Windows ===
+Thumbs.db
+Desktop.ini
+
+# === Jupyter ===
+.ipynb_checkpoints/
+*.ipynb
+
+# === Logs ===
+*.log
+logs/
+
+# === Coverage ===
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+
+# === mypy ===
+.mypy_cache/
+
+# === uv ===
+.uv-cache/

@@ -1,0 +1,46 @@
+[project]
+name = "auto-podcast-crs"
+version = "0.1.0"
+description = "End-to-end podcast pipeline: blog → Claude script → ElevenLabs v3 → MP3"
+requires-python = ">=3.11"
+authors = [
+    {name = "Shih-Feng Huang", email = "odafeng@hotmail.com"}
+]
+license = {text = "Proprietary"}
+readme = "README.md"
+
+dependencies = [
+    "requests>=2.31",
+    "python-dotenv>=1.0",
+    "pydantic>=2.0",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.5",
+    "pytest>=7.4",
+]
+# For future R2 integration
+storage = [
+    "boto3>=1.34",
+]
+# For future WordPress webhook server
+web = [
+    "fastapi>=0.110",
+    "uvicorn>=0.29",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["auto_podcast_crs"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]

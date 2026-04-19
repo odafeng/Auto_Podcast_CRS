@@ -1,0 +1,32 @@
+episode: "02"
+slug: "python-for-hesitant-physician"
+title_zh: "Python,猶豫中的醫師同事版"
+title_en: "Python for the Hesitant Physician"
+published: null
+source:
+  type: "prompt_driven"
+  description: "Spin-off episode, not based on a blog post. Generated from a prompt about a colleague who's on the fence about learning Python."
+script:
+  prompt_version: "v1_persuasion"
+  episode_kind: "persuasion"
+  char_count: 2879
+  chunks: 2
+  audio_tags_used: ["pauses", "emphasizes", "thoughtful", "laughs"]
+tts:
+  provider: "elevenlabs_v3"
+  voice_id: "${ELEVEN_VOICE_ID}"
+  model_id: "eleven_v3"
+  output_format: "mp3_44100_128"
+audio:
+  duration_seconds: 537.8
+  duration_mmss: "09:00"
+  size_mb: 8.21
+cost_usd:
+  claude: 0.04
+  elevenlabs: 0.40
+  total: 0.44
+notes: |
+  Persuasion episode. Target: a specific colleague who asked the author
+  for a beginner's programming podcast. Three myths addressed:
+  "AI does it for me", "not my field", "I tried before and quit".
+  Ends with a zero-friction action (open ChatGPT, ask about a pain point).
