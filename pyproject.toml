@@ -1,6 +1,6 @@
 [project]
 name = "auto-podcast-crs"
-version = "0.1.0"
+version = "0.2.0"
 description = "End-to-end podcast pipeline: blog → Claude script → ElevenLabs v3 → MP3"
 requires-python = ">=3.11"
 authors = [
@@ -14,12 +14,14 @@ dependencies = [
     "python-dotenv>=1.0",
     "pydantic>=2.0",
     "pyyaml>=6.0",
+    "tenacity>=8.2",
 ]
 
 [project.optional-dependencies]
 dev = [
     "ruff>=0.5",
     "pytest>=7.4",
+    "pre-commit>=3.7",
 ]
 # For future R2 integration
 storage = [
@@ -41,6 +43,11 @@ packages = ["auto_podcast_crs"]
 [tool.ruff]
 line-length = 100
 target-version = "py311"
+extend-exclude = ["episodes"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
