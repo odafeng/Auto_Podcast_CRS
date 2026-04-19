@@ -25,16 +25,25 @@ into the Claude API yourself.
 
 | Prompt version | Use when |
 |---|---|
-| `v1_generic` | Adapting a first-person manifesto-style blog post |
-| `v1_persuasion` | Convincing someone on the fence about doing X |
-| `v1_onboarding` | Giving a concrete, prescriptive first-day guide |
+| `v2_generic` (**default**) | First-person reflection / manifesto, conversational tone |
+| `v2_persuasion` | Convincing someone on the fence, conversational tone |
+| `v2_onboarding` | Prescriptive first-day guide, conversational tone |
+| `v1_generic` | (legacy) Original manifesto template — cleaner but reads more like copy |
+| `v1_persuasion` | (legacy) |
+| `v1_onboarding` | (legacy) |
+
+v2 is the current default. It explicitly forbids listicle structure
+("第一⋯第二⋯第三⋯"), requires filler words, and restricts audio tags
+to non-overacting ones. v1 prompts are retained as baseline for A/B
+comparison — don't delete them, they're the reproducibility record for
+ep01–03.
 
 ## 4. Generate the script
 
 ```bash
 python scripts/generate_script.py \
     --episode 04_your-episode-slug \
-    --prompt-version v1_generic \
+    --prompt-version v2_generic \
     --episode-kind manifesto
 ```
 

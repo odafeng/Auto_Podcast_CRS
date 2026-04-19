@@ -27,9 +27,12 @@ def main() -> int:
     parser.add_argument("--blog-path", type=Path, help="Path to blog source .md file")
     parser.add_argument(
         "--prompt-version",
-        default="v1_generic",
-        choices=["v1_generic", "v1_persuasion", "v1_onboarding"],
-        help="Which prompt template to use",
+        default="v2_generic",
+        choices=[
+            "v1_generic", "v1_persuasion", "v1_onboarding",
+            "v2_generic", "v2_persuasion", "v2_onboarding",
+        ],
+        help="Which prompt template to use (default: v2_generic)",
     )
     parser.add_argument(
         "--episode-kind",

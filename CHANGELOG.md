@@ -1,5 +1,42 @@
 # CHANGELOG
 
+## [0.3.0] — 2026-04-19
+
+Script quality pass. The v1 prompts produced scripts that read well but
+sounded like someone narrating copy — grammatically clean, listicle-
+structured, emotionally flat. v2 forces conversational register.
+
+### Added
+- `system_v2_generic.md`, `system_v2_persuasion.md`, `system_v2_onboarding.md`
+  — new conversational prompts. Key differences from v1:
+  - Explicitly forbids listicle structure ("第一⋯第二⋯第三⋯")
+  - Requires filler/hedge words ("欸", "然後呢", "對啊", "怎麼講")
+  - Requires direct listener address ("你想想看" / "你有沒有遇過")
+  - Restricts audio tags — bans `[excited]`, `[whispers]`, `[shouts]`;
+    uses `[pauses]` for thinking, not just drama
+  - Each prompt carries before/after examples showing the v1→v2 transform
+- `docs/prompt_ab_testing.md` — blind-listening protocol for comparing
+  prompt versions before promoting a new default.
+- `tests/test_v2_prompts.py` — guardrail tests that future edits don't
+  quietly undo the v2 invariants (no listicle, has fillers, direct
+  address, no overacting tags).
+- CLI `--prompt-version` accepts all six versions; default is now
+  `v2_generic`.
+
+### Changed
+- `docs/workflow.md` updated: v2 is the current default, v1 retained
+  as legacy/baseline.
+- v1 prompts explicitly NOT deleted — they're the reproducibility
+  record for ep01–03, and the A/B baseline going forward.
+
+### Not yet done
+- Actual A/B comparison (regenerate ep01–03 with v2, listen blind,
+  score). Protocol is documented; execution is the author's call.
+- Conversational-style prompt for future episode types (interview,
+  news-digest, Q&A) — build when needed.
+
+---
+
 ## [0.2.0] — 2026-04-19
 
 Production-hardening pass. Same pipeline, less fragility.

@@ -1,6 +1,6 @@
 [project]
 name = "auto-podcast-crs"
-version = "0.2.0"
+version = "0.3.0"
 description = "End-to-end podcast pipeline: blog → Claude script → ElevenLabs v3 → MP3"
 requires-python = ">=3.11"
 authors = [

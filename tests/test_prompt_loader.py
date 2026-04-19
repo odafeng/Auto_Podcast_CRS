@@ -17,7 +17,11 @@ def test_missing_prompt_raises():
 
 
 @pytest.mark.parametrize(
-    "version", ["v1_generic", "v1_persuasion", "v1_onboarding"]
+    "version",
+    [
+        "v1_generic", "v1_persuasion", "v1_onboarding",
+        "v2_generic", "v2_persuasion", "v2_onboarding",
+    ],
 )
 def test_all_shipped_prompts_load(version):
     adapter = ClaudeScriptAdapter(prompt_version=version)
