@@ -101,25 +101,35 @@ cp .env.example .env
 
 ### Produce one episode
 
+Two modes, pick the one that fits:
+
+**A. Blog → podcast** (you already wrote the blog post):
 ```bash
-# 1. Put source material in place
 mkdir -p episodes/04_my-slug
 cp /path/to/blog.md episodes/04_my-slug/source.md
 
-# 2. Generate script (default: v2_generic, more conversational)
 python scripts/generate_script.py --episode 04_my-slug
-
-# 3. Run TTS to produce raw MP3
 python scripts/run_tts.py --episode 04_my-slug
-
-# 4. Finish + upload + rebuild feed + upload feed
 python scripts/publish.py --episode 04_my-slug \
-    --intro static/intro.mp3 \
-    --outro static/outro.mp3
+    --intro static/intro.mp3 --outro static/outro.mp3
 ```
 
-Total time: ~3 minutes of pipeline execution. Total cost: ~$0.50 per
-episode.
+**B. Topic + resources → podcast** (you have a topic in mind and some
+reference material):
+```bash
+mkdir -p episodes/04_my-slug/resources
+# drop 2-5 relevant .md files (papers, notes, guidelines) into resources/
+# see docs/resource_preparation.md for what belongs there
+
+python scripts/generate_from_topic.py --episode 04_my-slug \
+    --topic "your episode topic in one sentence"
+python scripts/run_tts.py --episode 04_my-slug
+python scripts/publish.py --episode 04_my-slug \
+    --intro static/intro.mp3 --outro static/outro.mp3
+```
+
+Total time either way: ~3 minutes of pipeline execution. Total cost:
+~$0.50 per episode.
 
 ---
 

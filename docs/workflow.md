@@ -12,16 +12,23 @@ Naming: `NN_kebab-case-slug` where NN is zero-padded episode number.
 
 ## 2. Put the source material in
 
-### For a WordPress-based episode
-Copy the blog post body into `source.md`. (Once the WordPress fetcher
-is implemented, this step will be automatic.)
+### Option A — Blog-based episode (`generate_script.py`)
+Copy the blog post body into `source.md`. Adapts one blog post into a
+podcast script.
 
-### For a prompt-driven episode
-Skip `source.md`. Instead, write your brief (target audience, structure,
-what to say) directly at the bottom of this workflow doc, and pass it
-into the Claude API yourself.
+### Option B — Topic-based episode (`generate_from_topic.py`)
+Create `episodes/<id>/resources/` and drop 2–5 relevant `.md` files
+(papers, notes, guidelines). See `docs/resource_preparation.md` for what
+goes there. Synthesizes an original script on the topic from those
+sources.
+
+### For a prompt-driven episode (neither source.md nor resources)
+Skip both. Write your brief at the bottom of this workflow doc, and
+pass it into the Claude API yourself.
 
 ## 3. Choose a prompt version
+
+For **Option A** (blog → script, via `generate_script.py`):
 
 | Prompt version | Use when |
 |---|---|
@@ -32,14 +39,19 @@ into the Claude API yourself.
 | `v1_persuasion` | (legacy) |
 | `v1_onboarding` | (legacy) |
 
-v2 is the current default. It explicitly forbids listicle structure
-("第一⋯第二⋯第三⋯"), requires filler words, and restricts audio tags
-to non-overacting ones. v1 prompts are retained as baseline for A/B
-comparison — don't delete them, they're the reproducibility record for
-ep01–03.
+For **Option B** (topic + resources → script, via `generate_from_topic.py`):
+
+| Prompt version | Use when |
+|---|---|
+| `v3_topic_generic` (**default**) | Topic-based synthesis; you supply 2-5 resource files, Claude writes the script |
+
+v3 includes the v2 conversational-style rules and adds synthesis-specific
+guidance (how to handle source attribution, how to avoid paper-abstract
+register, how to weave author perspective with data).
 
 ## 4. Generate the script
 
+For **Option A**:
 ```bash
 python scripts/generate_script.py \
     --episode 04_your-episode-slug \
@@ -47,12 +59,19 @@ python scripts/generate_script.py \
     --episode-kind manifesto
 ```
 
-Review `episodes/04_your-episode-slug/script.txt`. Expected output:
-~2800–3500 characters, a few `[CHUNK_BREAK]` markers.
+For **Option B**:
+```bash
+# Make sure episodes/04_your-episode-slug/resources/ has 2-5 .md files first
+python scripts/generate_from_topic.py \
+    --episode 04_your-episode-slug \
+    --topic "your episode topic in one sentence" \
+    [--angle "optional extra framing"]
+```
 
-If you don't like it, tweak the prompt under `auto_podcast_crs/scripts/prompts/`
-and regenerate. Or rewrite the script manually — the pipeline doesn't
-care who wrote it.
+Both produce `episodes/<id>/script.txt` + update `metadata.yaml`.
+Option B additionally writes `sources_used.yaml` as an audit trail.
+
+Expected output: ~2800–3500 characters, 3–5 `[CHUNK_BREAK]` markers.
 
 ## 5. Run TTS
 

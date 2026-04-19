@@ -1,5 +1,75 @@
 # CHANGELOG
 
+## [0.5.0] — 2026-04-19
+
+Topic-based episode generation. Two pipelines now coexist: the original
+blog→script flow (v2 default) and a new topic+resources→script flow (v3).
+
+### Added
+- `auto_podcast_crs/scripts/resources.py` — per-episode resource loader.
+  Reads `episodes/<id>/resources/*.md` (or `.markdown`/`.txt`), sorts
+  stably by filename for reproducibility, formats as XML-tagged blocks
+  for Claude, enforces a conservative token budget (400k estimated
+  tokens, ~half of Sonnet 4.6's context).
+- `auto_podcast_crs/scripts/topic_to_script.py` — `TopicScriptAdapter`
+  class. Takes a topic string + a resource bundle + optional angle,
+  returns a full `TopicScriptResult` with script text, chunks,
+  resources used, and usage metadata. Includes a verbatim-copy
+  detector that warns when the model reproduces 40+ char runs from
+  any source file (the v3 prompt explicitly forbids this; the warning
+  is the safety net).
+- `auto_podcast_crs/scripts/prompts/system_v3_topic_generic.md` — new
+  v3 prompt. Inherits the v2 conversational-style rules (no listicle,
+  required fillers, direct address, no overacting tags) and adds
+  synthesis-specific guidance: how to handle source attribution (口語
+  format: "2024 年有篇 Annals of Surgery 的研究…"), how to avoid
+  paper-abstract register, how to weave author perspective with data,
+  how to handle conflicting sources.
+- `scripts/generate_from_topic.py` — new CLI for topic mode. Requires
+  `--episode` and `--topic`, accepts optional `--angle` and
+  `--resources-dir` overrides. Writes `script.txt`, `sources_used.yaml`
+  (audit trail: filenames + char counts + timestamp), and updates
+  `metadata.yaml` (creates if absent).
+- `docs/resource_preparation.md` — curation guide: what belongs in
+  resources/, what doesn't, naming conventions, how many files.
+- Tests: +17 covering resource loading (file discovery, ordering,
+  extension filtering, token budget enforcement, XML formatting) and
+  topic script generation (prompt construction, resource inclusion,
+  angle handling, empty-topic rejection, verbatim-copy detection).
+
+### Changed
+- `docs/workflow.md` now documents both modes (Option A: blog,
+  Option B: topic+resources).
+- `README.md` "Produce one episode" section has two sub-sections for
+  the two modes.
+- `metadata.yaml` schema now supports `source.type:
+  "topic_plus_resources"` alongside the existing
+  `source.type: "wordpress_post"`.
+- `pyproject.toml` version → 0.5.0.
+
+### Not changed
+- v1/v2 prompts and `generate_script.py` retained unchanged — the
+  blog→script flow continues to work. Both flows converge on the same
+  `script.txt`, so downstream `run_tts.py` / `publish.py` don't know
+  or care which one produced it.
+
+### Design choices worth documenting
+- **Per-episode `resources/` folder, not global.** `episodes/<id>/resources/`
+  means each episode's bibliography is git-tracked next to its script —
+  trivial reproducibility in six months. A global `resources/` would
+  leak context across episodes and lose that trail.
+- **`TopicScriptAdapter` is not a subclass of `ScriptAdapter`.** The
+  inputs are fundamentally different (one source_text vs topic + N
+  documents + optional angle), so forcing them into one ABC would be
+  false unification. They share the same output type downstream
+  (`script.txt`), which is the only integration point that matters.
+- **Verbatim-copy detection is a warning, not an error.** The v3
+  prompt forbids it; if Claude violates, we want visibility, not
+  a hard stop (sometimes the "copy" is a technical term that can't
+  be rephrased).
+
+---
+
 ## [0.4.0] — 2026-04-19
 
 End-to-end publishing. The pipeline now genuinely goes from `source.md`
